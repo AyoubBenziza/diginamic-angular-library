@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { BookFormComponent } from '../book-form/book-form.component';
 import { Book } from '../interfaces/book.model';
 import { BookService } from '../services/book.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-book-list',
@@ -31,5 +30,9 @@ export class BookListComponent {
 
   activateForm(): void {
     this.isFormActive = true;
+  }
+
+  onFormSubmitted(): void {
+    this.isFormActive = false;
   }
 }

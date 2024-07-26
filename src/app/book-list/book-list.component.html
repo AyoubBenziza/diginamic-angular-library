@@ -45,6 +45,6 @@
     </div>
   </div>
   @if (isFormActive) {
-  <app-book-form></app-book-form>
+  <app-book-form (formSubmitted)="onFormSubmitted()"></app-book-form>
   }
 </div>

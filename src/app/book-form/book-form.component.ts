@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -18,6 +18,8 @@ import { Book } from '../interfaces/book.model';
   styleUrl: './book-form.component.scss',
 })
 export class BookFormComponent {
+  @Output() formSubmitted = new EventEmitter<void>();
+
   bookForm = new FormGroup({
     id: new FormControl(0),
     title: new FormControl('', Validators.required),
@@ -29,16 +31,20 @@ export class BookFormComponent {
 
   constructor(private bookService: BookService) {}
 
-  onSubmit(): void {
-    const book: Book = {
-      id: this.bookForm.value.id || 0,
-      title: this.bookForm.value.title || '',
-      author: this.bookForm.value.author || '',
-      category: this.bookForm.value.category || '',
-      cover: this.bookForm.value.cover || undefined,
-      publishedAt: this.bookForm.value.publishedAt || new Date(),
-    };
-    console.log(book);
-    this.bookService.createBook(book);
+  submitBookForm(): void {
+    if (this.bookForm.valid) {
+      const book: Book = {
+        id: this.bookForm.value.id || 0,
+        title: this.bookForm.value.title || '',
+        author: this.bookForm.value.author || '',
+        category: this.bookForm.value.category || '',
+        cover: this.bookForm.value.cover || undefined,
+        publishedAt: this.bookForm.value.publishedAt || new Date(),
+      };
+      console.log(book);
+      this.bookService.createBook(book);
+
+      this.formSubmitted.emit();
+    }
   }
 }

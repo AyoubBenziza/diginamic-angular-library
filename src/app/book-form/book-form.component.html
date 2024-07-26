@@ -1,7 +1,11 @@
 <div class="flex justify-center items-center min-h-screen bg-gray-100">
   <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
     <h2 class="text-2xl font-bold mb-6 text-center">Formulaire de livre</h2>
-    <form [formGroup]="bookForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <form
+      [formGroup]="bookForm"
+      (ngSubmit)="submitBookForm()"
+      class="space-y-6"
+    >
       <div class="form-group">
         <label for="cover" class="block text-sm font-medium text-gray-700 mb-2"
           >Couverture(URL)</label

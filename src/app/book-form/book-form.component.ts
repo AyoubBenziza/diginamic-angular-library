@@ -3,22 +3,21 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  AbstractControl,
   Validators,
 } from '@angular/forms';
-import { BookService } from '../services/book.service';
 import { Book } from '../interfaces/book.model';
+import { BookService } from '../services/book.service';
 
 @Component({
   selector: 'app-book-form',
   standalone: true,
   imports: [ReactiveFormsModule],
-  providers: [BookService],
   templateUrl: './book-form.component.html',
   styleUrl: './book-form.component.scss',
 })
 export class BookFormComponent {
   @Output() formSubmitted = new EventEmitter<void>();
+  @Output() formClosed = new EventEmitter<void>();
 
   bookForm = new FormGroup({
     id: new FormControl(0),
@@ -46,5 +45,9 @@ export class BookFormComponent {
 
       this.formSubmitted.emit();
     }
+  }
+
+  closeBookForm(): void {
+    this.formClosed.emit();
   }
 }

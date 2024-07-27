@@ -14,6 +14,7 @@ import { BookService } from '../services/book.service';
 export class BookListComponent {
   books: Book[] = [];
   isFormActive = false;
+  isAscending = true;
 
   constructor(private bookService: BookService) {
     this.books = this.bookService.getBooks();
@@ -28,11 +29,26 @@ export class BookListComponent {
     this.books = this.bookService.getBooks();
   }
 
+  sortBooksByTitle(): void {
+    this.books = this.books.sort((a, b) => {
+      if (this.isAscending) {
+        return a.title.localeCompare(b.title);
+      } else {
+        return b.title.localeCompare(a.title);
+      }
+    });
+    this.isAscending = !this.isAscending; // Toggle sort order
+  }
+
   activateForm(): void {
     this.isFormActive = true;
   }
 
-  onFormSubmitted(): void {
+  deactivateForm(): void {
     this.isFormActive = false;
+  }
+
+  onFormSubmitted(): void {
+    this.deactivateForm();
   }
 }

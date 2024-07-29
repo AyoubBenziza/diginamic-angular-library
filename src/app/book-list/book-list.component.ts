@@ -1,5 +1,6 @@
-import { DatePipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { BookFormComponent } from '../book-form/book-form.component';
 import { Book } from '../interfaces/book.model';
 import { BookService } from '../services/book.service';
@@ -7,24 +8,22 @@ import { BookService } from '../services/book.service';
 @Component({
   selector: 'app-book-list',
   standalone: true,
-  imports: [BookFormComponent, DatePipe],
+  imports: [BookFormComponent, DatePipe, AsyncPipe],
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.scss',
 })
 export class BookListComponent {
-  books: Book[] = [];
+  books$: Observable<Book[]>;
   selectedBookId: number | null = null;
   isFormActive = false;
   isAscending = true;
 
-  constructor(private bookService: BookService) {}
-
-  ngOnInit() {
-    this.loadBooks();
+  constructor(private bookService: BookService) {
+    this.books$ = this.bookService.getBooks();
   }
 
   loadBooks(): void {
-    this.books = this.bookService.getBooks();
+    this.books$ = this.bookService.getBooks();
   }
 
   editBook(id: number): void {
@@ -34,18 +33,19 @@ export class BookListComponent {
 
   removeBook(id: number): void {
     this.bookService.deleteBook(id);
-    this.books = this.bookService.getBooks();
   }
 
   sortBooksByTitle(): void {
-    this.books = this.books.sort((a, b) => {
-      if (this.isAscending) {
-        return a.title.localeCompare(b.title);
-      } else {
-        return b.title.localeCompare(a.title);
-      }
+    this.books$.subscribe((books) => {
+      this.books$ = new Observable((observer) => {
+        observer.next(
+          books.sort((a, b) => {
+            const comparison = a.title.localeCompare(b.title);
+            return this.isAscending ? comparison : -comparison;
+          })
+        );
+      });
     });
-    this.isAscending = !this.isAscending; // Toggle sort order
   }
 
   activateForm(): void {
@@ -58,7 +58,6 @@ export class BookListComponent {
   }
 
   onFormSubmitted(): void {
-    this.loadBooks();
     this.deactivateForm();
   }
 }

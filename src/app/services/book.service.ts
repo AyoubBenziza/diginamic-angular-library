@@ -29,12 +29,15 @@ export class BookService {
     return this.books;
   }
 
+  getBookById(id: number | null): Book | null {
+    return this.books.find((book) => book.id === id) || null;
+  }
+
   getBookByName(title: string): Book | null {
     return this.books.find((book) => book.title === title) || null;
   }
 
   createBook(book: Book): void {
-    book.id = this.books.length + 1;
     this.books.push(book);
   }
 

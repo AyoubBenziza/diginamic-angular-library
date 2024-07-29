@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -16,10 +22,12 @@ import { BookService } from '../services/book.service';
   styleUrl: './book-form.component.scss',
 })
 export class BookFormComponent {
+  @Input() bookId: number | null = null;
   @Output() formSubmitted = new EventEmitter<void>();
   @Output() formClosed = new EventEmitter<void>();
+  isEditMode = false;
 
-  bookForm = new FormGroup({
+  bookForm: FormGroup = new FormGroup({
     id: new FormControl(0),
     title: new FormControl('', Validators.required),
     author: new FormControl('', Validators.required),
@@ -30,10 +38,44 @@ export class BookFormComponent {
 
   constructor(private bookService: BookService) {}
 
+  ngOnInit(): void {
+    if (this.bookId) {
+      this.loadBookData();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['bookId'] && changes['bookId'].currentValue !== null) {
+      this.loadBookData();
+    } else {
+      this.resetForm();
+    }
+  }
+
+  loadBookData(): void {
+    const book = this.bookService.getBookById(this.bookId);
+    if (book) {
+      this.isEditMode = true;
+      this.bookForm.patchValue({
+        id: book.id,
+        title: book.title,
+        author: book.author,
+        category: book.category,
+        publishedAt: book.publishedAt,
+      });
+    }
+  }
+
+  resetForm(): void {
+    this.bookId = null;
+    this.isEditMode = false;
+    this.bookForm.reset();
+  }
+
   submitBookForm(): void {
     if (this.bookForm.valid) {
       const book: Book = {
-        id: this.bookForm.value.id || 0,
+        id: this.bookForm.value.id || Date.now(),
         title: this.bookForm.value.title || '',
         author: this.bookForm.value.author || '',
         category: this.bookForm.value.category || '',
@@ -41,13 +83,19 @@ export class BookFormComponent {
         publishedAt: this.bookForm.value.publishedAt || new Date(),
       };
       console.log(book);
-      this.bookService.createBook(book);
-
+      if (this.isEditMode) {
+        this.bookService.updateBook(book.id, book);
+      } else {
+        this.bookService.createBook(book);
+      }
       this.formSubmitted.emit();
+      this.resetForm();
+      this.bookId = null;
     }
   }
 
   closeBookForm(): void {
+    this.resetForm();
     this.formClosed.emit();
   }
 }

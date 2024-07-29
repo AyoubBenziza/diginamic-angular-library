@@ -51,7 +51,13 @@
               Published At: {{ book.publishedAt | date : "dd/MM/yyyy" }}
             </p>
           </div>
-          <div class="flex justify-end mt-auto">
+          <div class="flex justify-end mt-auto space-x-2">
+            <button
+              (click)="editBook(book.id)"
+              class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded"
+            >
+              Edit
+            </button>
             <button
               (click)="removeBook(book.id)"
               class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
@@ -80,6 +86,7 @@
       (click)="deactivateForm()"
     ></div>
     <app-book-form
+      [bookId]="selectedBookId"
       (formSubmitted)="onFormSubmitted()"
       (formClosed)="deactivateForm()"
     ></app-book-form>

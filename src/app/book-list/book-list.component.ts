@@ -13,15 +13,23 @@ import { BookService } from '../services/book.service';
 })
 export class BookListComponent {
   books: Book[] = [];
+  selectedBookId: number | null = null;
   isFormActive = false;
   isAscending = true;
 
-  constructor(private bookService: BookService) {
+  constructor(private bookService: BookService) {}
+
+  ngOnInit() {
+    this.loadBooks();
+  }
+
+  loadBooks(): void {
     this.books = this.bookService.getBooks();
   }
 
-  ngOnInit() {
-    this.books = this.bookService.getBooks();
+  editBook(id: number): void {
+    this.selectedBookId = id;
+    this.activateForm();
   }
 
   removeBook(id: number): void {
@@ -46,9 +54,11 @@ export class BookListComponent {
 
   deactivateForm(): void {
     this.isFormActive = false;
+    this.selectedBookId = null;
   }
 
   onFormSubmitted(): void {
+    this.loadBooks();
     this.deactivateForm();
   }
 }

@@ -13,17 +13,17 @@ import { BookService } from '../services/book.service';
   styleUrl: './book-list.component.scss',
 })
 export class BookListComponent {
-  books$: Observable<Book[]>;
+  books: Observable<Book[]>;
   selectedBookId: number | null = null;
   isFormActive = false;
   isAscending = true;
 
   constructor(private bookService: BookService) {
-    this.books$ = this.bookService.getBooks();
+    this.books = this.bookService.getBooks();
   }
 
   loadBooks(): void {
-    this.books$ = this.bookService.getBooks();
+    this.books = this.bookService.getBooks();
   }
 
   editBook(id: number): void {
@@ -36,8 +36,8 @@ export class BookListComponent {
   }
 
   sortBooksByTitle(): void {
-    this.books$.subscribe((books) => {
-      this.books$ = new Observable((observer) => {
+    this.books.subscribe((books) => {
+      this.books = new Observable((observer) => {
         observer.next(
           books.sort((a, b) => {
             const comparison = a.title.localeCompare(b.title);

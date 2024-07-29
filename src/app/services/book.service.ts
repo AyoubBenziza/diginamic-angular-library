@@ -9,7 +9,6 @@ export class BookService {
   private booksSubject: BehaviorSubject<Book[]> = new BehaviorSubject<Book[]>(
     []
   );
-  books$: Observable<Book[]> = this.booksSubject.asObservable();
 
   constructor() {
     this.booksSubject.next([
@@ -32,7 +31,7 @@ export class BookService {
   }
 
   getBooks(): Observable<Book[]> {
-    return this.books$;
+    return this.booksSubject.asObservable();
   }
 
   getBookById(id: number | null): Book | undefined {

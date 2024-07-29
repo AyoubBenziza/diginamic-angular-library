@@ -2,22 +2,22 @@
   <nav class="bg-gray-800 p-4">
     <div class="container mx-auto flex justify-between items-center">
       <div class="text-white text-lg font-bold">My Library</div>
-      <ul class="flex space-x-4">
-        <li>
-          <a
-            routerLink="/"
-            class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-            >Home</a
-          >
-        </li>
-        <li>
-          <a
-            routerLink="/books"
-            class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-            >Books</a
-          >
-        </li>
-      </ul>
+      <nav class="flex space-x-4">
+        <a
+          routerLink="/"
+          routerLinkActive="bg-red-900 rounded-md"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+          >Home</a
+        >
+        <a
+          routerLink="/books"
+          routerLinkActive="bg-red-900 rounded-md"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+          >Books</a
+        >
+      </nav>
     </div>
   </nav>
   <div class="grow flex flex-col">

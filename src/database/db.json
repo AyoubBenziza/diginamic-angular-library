@@ -1,0 +1,61 @@
+{
+  "books": [
+    {
+      "id": "1",
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "category": "Fiction",
+      "publishedAt": "1925-04-10"
+    },
+    {
+      "id": "2",
+      "title": "To Kill a Mockingbird",
+      "author": "Harper Lee",
+      "category": "Fiction",
+      "cover": "https://via.placeholder.com/150",
+      "publishedAt": "1960-07-11"
+    },
+    {
+      "id": "3",
+      "title": "1984",
+      "author": "George Orwell",
+      "category": "Fiction",
+      "publishedAt": "1949-06-08"
+    },
+    {
+      "id": "4",
+      "title": "Animal Farm",
+      "author": "George Orwell",
+      "category": "Fiction",
+      "publishedAt": "1945-08-17"
+    },
+    {
+      "id": "5",
+      "title": "Brave New World",
+      "author": "Aldous Huxley",
+      "category": "Fiction",
+      "publishedAt": "1932-10-27"
+    },
+    {
+      "id": "6",
+      "title": "The Catcher in the Rye",
+      "author": "J.D. Salinger",
+      "category": "Fiction",
+      "publishedAt": "1951-07-16"
+    },
+    {
+      "id": "7",
+      "title": "The Grapes of Wrath",
+      "author": "John Steinbeck",
+      "category": "Fiction",
+      "publishedAt": "1939-04-14"
+    },
+    {
+      "id": "1722379709919",
+      "title": "test",
+      "author": "George Orwell",
+      "category": "Non-Fiction",
+      "publishedAt": "2024-07-25"
+    }
+  ]
+}

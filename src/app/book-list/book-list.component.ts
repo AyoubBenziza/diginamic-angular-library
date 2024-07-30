@@ -22,10 +22,6 @@ export class BookListComponent {
     this.books = this.bookService.getBooks();
   }
 
-  loadBooks(): void {
-    this.books = this.bookService.getBooks();
-  }
-
   editBook(id: number): void {
     this.selectedBookId = id;
     this.activateForm();
@@ -36,6 +32,7 @@ export class BookListComponent {
   }
 
   sortBooksByTitle(): void {
+    this.isAscending = !this.isAscending;
     this.books.subscribe((books) => {
       this.books = new Observable((observer) => {
         observer.next(

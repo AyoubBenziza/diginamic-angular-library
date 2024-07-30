@@ -1,18 +1,8 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { Book } from '../interfaces/book.model';
-import { BookService } from '../services/book.service';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges,} from '@angular/core';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators,} from '@angular/forms';
+import {Book} from '../interfaces/book.model';
+import {BookService} from '../services/book.service';
+import {firstValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-book-form',
@@ -21,7 +11,7 @@ import { BookService } from '../services/book.service';
   templateUrl: './book-form.component.html',
   styleUrl: './book-form.component.scss',
 })
-export class BookFormComponent {
+export class BookFormComponent implements OnInit, OnChanges{
   @Input() bookId: number | null = null;
   @Output() formSubmitted = new EventEmitter<void>();
   @Output() formClosed = new EventEmitter<void>();
@@ -53,16 +43,17 @@ export class BookFormComponent {
   }
 
   loadBookData(): void {
-    const book = this.bookService.getBookById(this.bookId);
-    if (book) {
-      this.isEditMode = true;
-      this.bookForm.patchValue({
-        id: book.id,
-        title: book.title,
-        author: book.author,
-        category: book.category,
-        publishedAt: book.publishedAt,
-      });
+    if (this.bookId !== null) {
+      firstValueFrom(this.bookService.getBookById(this.bookId)).then(book => {
+          this.isEditMode = true;
+          this.bookForm.patchValue({
+            id: book.id,
+            title: book.title,
+            author: book.author,
+            category: book.category,
+            publishedAt: new Date(book.publishedAt).toLocaleDateString('en-CA'),
+        }
+      )});
     }
   }
 
@@ -75,7 +66,7 @@ export class BookFormComponent {
   submitBookForm(): void {
     if (this.bookForm.valid) {
       const book: Book = {
-        id: this.bookForm.value.id || Date.now(),
+        id: this.bookId || Date.now(),
         title: this.bookForm.value.title || '',
         author: this.bookForm.value.author || '',
         category: this.bookForm.value.category || '',

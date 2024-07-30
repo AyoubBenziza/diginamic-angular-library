@@ -1,61 +1,51 @@
-import { Injectable } from '@angular/core';
-import { Book } from '../interfaces/book.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Book} from '../interfaces/book.model';
+import {BehaviorSubject, Observable, tap} from 'rxjs';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root',
 })
 export class BookService {
-  private booksSubject: BehaviorSubject<Book[]> = new BehaviorSubject<Book[]>(
-    []
-  );
+  private booksSubject = new BehaviorSubject<Book[]>([])
+  private apiUrl = 'http://localhost:3000/books';
 
-  constructor() {
-    this.booksSubject.next([
-      {
-        id: Date.now() + 1,
-        title: 'The Great Gatsby',
-        author: 'F. Scott Fitzgerald',
-        category: 'Fiction',
-        publishedAt: new Date('1925-04-10'),
-      },
-      {
-        id: Date.now() + 2,
-        title: 'To Kill a Mockingbird',
-        author: 'Harper Lee',
-        category: 'Fiction',
-        cover: 'https://via.placeholder.com/150',
-        publishedAt: new Date('1960-07-11'),
-      },
-    ]);
+  constructor(private http: HttpClient) {
+    this.loadBooks();
+  }
+
+  private loadBooks(): void {
+    this.http.get<Book[]>(this.apiUrl).subscribe(books => {
+      this.booksSubject.next(books);
+    });
   }
 
   getBooks(): Observable<Book[]> {
     return this.booksSubject.asObservable();
   }
 
-  getBookById(id: number | null): Book | undefined {
-    return this.booksSubject.getValue().find((book) => book.id === id);
+  getBookById(id: number | null): Observable<Book> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.get<Book>(url);
   }
 
   createBook(book: Book): void {
-    const books = this.booksSubject.getValue();
-    books.push(book);
-    this.booksSubject.next(books);
+    this.http.post<Book>(this.apiUrl, {...book,"id":book.id.toString()}).pipe(
+      tap(() => this.loadBooks())
+    ).subscribe();
   }
 
   updateBook(id: number, updatedBook: Book): void {
-    const books = this.booksSubject.getValue();
-    const index = books.findIndex((book) => book.id === id);
-    if (index !== -1) {
-      books[index] = updatedBook;
-      this.booksSubject.next(books);
-    }
+    const url = `${this.apiUrl}/${id}`;
+    this.http.put<void>(url, updatedBook).pipe(
+      tap(() => this.loadBooks())
+    ).subscribe();
   }
 
   deleteBook(id: number): void {
-    const books = this.booksSubject.getValue();
-    const updatedBooks = books.filter((book) => book.id !== id);
-    this.booksSubject.next(updatedBooks);
+    const url = `${this.apiUrl}/${id}`;
+    this.http.delete<void>(url).pipe(
+      tap(() => this.loadBooks())
+    ).subscribe();
   }
 }

@@ -5,6 +5,7 @@
       "title": "The Great Gatsby",
       "author": "F. Scott Fitzgerald",
       "category": "Fiction",
+      "cover": "https://upload.wikimedia.org/wikipedia/commons/7/7a/The_Great_Gatsby_Cover_1925_Retouched.jpg",
       "publishedAt": "1925-04-10"
     },
     {
@@ -12,7 +13,7 @@
       "title": "To Kill a Mockingbird",
       "author": "Harper Lee",
       "category": "Fiction",
-      "cover": "https://via.placeholder.com/150",
+      "cover": "https://m.media-amazon.com/images/I/71FxgtFKcQL._AC_UF1000,1000_QL80_.jpg",
       "publishedAt": "1960-07-11"
     },
     {
@@ -20,6 +21,7 @@
       "title": "1984",
       "author": "George Orwell",
       "category": "Fiction",
+      "cover": "https://m.media-amazon.com/images/I/61ZewDE3beL._AC_UF1000,1000_QL80_.jpg",
       "publishedAt": "1949-06-08"
     },
     {

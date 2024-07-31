@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { BookFormComponent } from '../book-form/book-form.component';
 import { Book } from '../interfaces/book.model';
 import { BookService } from '../services/book.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-book-list',
@@ -18,8 +19,12 @@ export class BookListComponent {
   isFormActive = false;
   isAscending = true;
 
-  constructor(private bookService: BookService) {
+  constructor(private bookService: BookService, private router: Router) {
     this.books = this.bookService.getBooks();
+  }
+
+  viewBookDetails(bookId: number): void {
+    this.router.navigate(['/books', bookId, 'view']);
   }
 
   editBook(id: number): void {
